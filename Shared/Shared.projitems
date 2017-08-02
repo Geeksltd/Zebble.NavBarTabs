@@ -20,6 +20,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Tabs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)NuGet\Icon.png" />
+    <None Include="$(MSBuildThisFileDirectory)NuGet\Icon.png" />
   </ItemGroup>
 </Project>
