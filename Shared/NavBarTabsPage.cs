@@ -26,7 +26,7 @@ namespace Zebble
         {
             if (Tabs == null)
             {
-                Tabs = new TTabs().Absolute();
+                Tabs = new TTabs().Absolute().Hide();
                 await Root.Add(Tabs);
             }
 
@@ -78,7 +78,7 @@ namespace Zebble
                 BodyScrollerWrapper.Margin(top: NavBarBackground.ActualBottom);
             }
 
-            await Tabs.BringToFront();
+            await Tabs.Visible().BringToFront();
         }
     }
 }
