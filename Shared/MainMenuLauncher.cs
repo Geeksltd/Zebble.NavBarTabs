@@ -7,8 +7,9 @@ namespace Zebble
     {
         public static MainMenuLauncher<TMenu> Current { get; private set; }
         public static Overlay Overlay = new Overlay();
+        public readonly AsyncEvent Toggled = new AsyncEvent();
         public static TMenu Menu;
-        bool IsExpanded, Animating;
+        bool IsExpanded, Animating, IsToggling;
 
         public float MenuWidth = 250;
 
@@ -33,7 +34,19 @@ namespace Zebble
             {
                 this.Hide();
                 Current = this;
+                Nav.HardwareBack.InsertHandler(HardwareBackHandler, 0);
             }
+        }
+
+        async Task HardwareBackHandler(HardwareBackEventArgs args)
+        {
+#if ANDROID
+            if (IsExpanded)
+            {
+                await HideMenu();
+                args.Cancel = true;
+            }
+#endif
         }
 
         public virtual async Task Setup()
@@ -73,8 +86,11 @@ namespace Zebble
         {
             if (Animating) return;
             Animating = true;
+            IsToggling = true;
             if (IsExpanded) await HideMenu(); else await ShowMenu();
+            IsToggling = false;
             Animating = false;
+            await Toggled.Raise();
         }
 
         public async Task ShowMenu()
@@ -93,6 +109,7 @@ namespace Zebble
                 await AnimateMenuIn();
                 await overlayAnimation;
             }
+            if (!IsToggling) await Toggled.Raise();
         }
 
         public async Task HideMenu()
@@ -106,6 +123,7 @@ namespace Zebble
                 await AnimateMenuOut();
                 this.Hide();
             }
+            if (!IsToggling) await Toggled.Raise();
         }
 
         protected virtual HorizontalAlignment Alignment => HorizontalAlignment.Left;
@@ -139,6 +157,12 @@ namespace Zebble
             else throw new NotImplementedException(Alignment + " is not implemented.");
 
             return Task.CompletedTask;
+        }
+
+        public override void Dispose()
+        {
+            Nav.HardwareBack.RemoveHandler(HardwareBackHandler);
+            base.Dispose();
         }
     }
 }
