@@ -11,7 +11,7 @@
     <owners>Mobile App Technologies Ltd</owners>
     <copyright>Copyright ©2017 | Mobile App Technologies Ltd</copyright>
     <dependencies>
-      <dependency id="Zebble.IconButton" version="3.20.265" />
+      <dependency id="Zebble.IconButton" version="3.20.267" />
     </dependencies>
   </metadata>
   <files>
