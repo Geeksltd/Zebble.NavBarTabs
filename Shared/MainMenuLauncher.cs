@@ -59,7 +59,7 @@ namespace Zebble
 
         public virtual async Task Show()
         {
-            while (!IsAlreadyRendered())
+            while (!IsRendered())
                 await Task.Delay(Animation.OneFrame);
 
             await BringToFront();

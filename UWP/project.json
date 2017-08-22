@@ -1,10 +1,10 @@
 ﻿{
   "dependencies": {
-    "Zebble": "4.1.290",
+    "Zebble": "4.1.298",
     "Zebble.IconButton": "3.20.267"
   },
   "frameworks": {
-    "uap10.0": {}
+    "uap10.0.10240": {}
   },
   "runtimes": {
     "win10-arm": {},

@@ -39,9 +39,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="Zebble.Android">
-      <HintPath>..\packages\Zebble.4.1.290\lib\MonoAndroid10\Zebble.Android.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Zebble.Android, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zebble.4.1.298\lib\MonoAndroid10\Zebble.Android.dll</HintPath>
     </Reference>
     <Reference Include="Zebble.IconButton.Android, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Zebble.IconButton.3.20.267\lib\MonoAndroid10\Zebble.IconButton.Android.dll</HintPath>
