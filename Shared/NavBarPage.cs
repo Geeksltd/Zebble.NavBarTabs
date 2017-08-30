@@ -26,16 +26,20 @@ namespace Zebble
             });
         }
 
-        public override async Task OnInitializing()
+        protected override async Task InitializeFromMarkup()
         {
-            if (NavBarBackground == null) await CreateNavBarBackground();
-
-            await base.OnInitializing();
+            await base.InitializeFromMarkup();
 
             await Add(NavBar);
             await Add(BodyScrollerWrapper);
             await BodyScrollerWrapper.Add(BodyScroller);
             await BodyScroller.Add(Body);
+        }
+
+        public override async Task OnInitializing()
+        {
+            if (NavBarBackground == null) await CreateNavBarBackground();
+            await base.OnInitializing();
         }
 
         protected virtual async Task CreateNavBarBackground()
@@ -44,7 +48,8 @@ namespace Zebble
                 .Absolute()
                 .CssClass("navbar-background");
 
-            if (!(Nav.CurrentPage is NavBarPage)) result.Hide();
+            if (!(Nav.CurrentPage is NavBarPage))
+                result.Hide();
 
             await Root.Add(result, awaitNative: true);
 

@@ -22,15 +22,15 @@ namespace Zebble
             });
         }
 
-        public override async Task OnInitializing()
+        protected override async Task InitializeFromMarkup()
         {
+            await base.InitializeFromMarkup();
+
             if (Tabs == null)
             {
                 Tabs = new TTabs().Absolute().Hide();
                 await Root.Add(Tabs);
             }
-
-            await base.OnInitializing();
         }
 
         static Task HandleNavigating(NavigationEventArgs args)
