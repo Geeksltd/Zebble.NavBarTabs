@@ -48,9 +48,11 @@
                 .Select(x => new { Tab = x, Distance = currentNavPath.IndexOf(p => p == x.TargetPageType) })
                 .ToArray();
 
-            var selected = tabsInNavHistory.WithMin(x => x.Distance)?.Tab;
-
-            selected.Perform(t => t.Selected = true);
+            if (tabsInNavHistory.Any())
+            {
+                var selected = tabsInNavHistory.WithMin(x => x.Distance)?.Tab;
+                selected.Perform(t => t.Selected = true);
+            }
 
             return Task.CompletedTask;
         }
