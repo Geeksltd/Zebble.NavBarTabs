@@ -14,7 +14,7 @@ namespace Zebble
 
         static NavBarPage()
         {
-            Nav.NavigationAnimationStarted.Handle(OnNavigating);
+            Nav.NavigationAnimationStarted.Handle(OnNavigationAnimationStarted);
 
             Nav.FullRefreshed.Handle(async () =>
             {
@@ -56,8 +56,10 @@ namespace Zebble
             NavBarBackground = result;
         }
 
-        static Task OnNavigating(NavigationEventArgs args)
+        static Task OnNavigationAnimationStarted(NavigationEventArgs args)
         {
+            if (args.From is PopUp || args.To is PopUp) return Task.CompletedTask;
+
             NavBarBackground?.Visible(args.To is NavBarPage);
 
             var fade = args.To is NavBarPage && args.To.Transition != PageTransition.None;

@@ -10,7 +10,7 @@ namespace Zebble
 
         static NavBarTabsPage()
         {
-            Nav.NavigationAnimationStarted.Handle(HandleNavigating);
+            Nav.NavigationAnimationStarted.Handle(HandleNavigationAnimationStarted);
 
             Nav.FullRefreshed.Handle(async () =>
             {
@@ -33,9 +33,11 @@ namespace Zebble
             }
         }
 
-        static Task HandleNavigating(NavigationEventArgs args)
+        static Task HandleNavigationAnimationStarted(NavigationEventArgs args)
         {
             if (Tabs == null) return Task.CompletedTask;
+
+            if (args.From is PopUp || args.To is PopUp) return Task.CompletedTask;
 
             var shouldFadeIn = args.To is NavBarTabsPage<TTabs> && !(args.From is NavBarTabsPage<TTabs>);
             var shouldFadeOut = args.From is NavBarTabsPage<TTabs> && !(args.To is NavBarTabsPage<TTabs>);
