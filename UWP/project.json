@@ -1,6 +1,6 @@
 ﻿{
   "dependencies": {
-    "Zebble": "4.2.319",
+    "Zebble": "4.2.341",
     "Zebble.IconButton": "3.20.267"
   },
   "frameworks": {
