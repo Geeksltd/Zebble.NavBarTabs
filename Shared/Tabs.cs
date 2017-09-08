@@ -70,6 +70,7 @@
             Task HandleTapped()
             {
                 Selected = true;
+                if (UseNavForward) return Nav.Forward<TPage>(Transition);
                 return Nav.Go<TPage>(Transition);
             }
         }
@@ -79,6 +80,10 @@
         public class Tab : Canvas
         {
             bool selected;
+            /// <summary>
+            /// When set true uses the Nav.Forward() for navigating. Otherwise it will be a Nav.Go()
+            /// </summary>
+            public bool UseNavForward;
             public readonly AsyncEvent SelectedChanged = new AsyncEvent();
             public readonly Stack Stack = new Stack();
             public readonly ImageView Icon = new ImageView { Id = "Icon" };
