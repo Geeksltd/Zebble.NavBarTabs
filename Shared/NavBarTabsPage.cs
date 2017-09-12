@@ -65,20 +65,18 @@ namespace Zebble
             {
                 Height.BindTo(Root.Height);
                 Tabs.Y.BindTo(NavBarBackground.Height);
-                BodyScrollerWrapper.Height.BindTo(Height, NavBarBackground.Height, Tabs.Height, (x, y, z) => x - y - z);
-
                 Tabs.Height.Changed.Handle(() => BodyScrollerWrapper.Margin(top: Tabs.ActualBottom));
                 Tabs.Y.Changed.Handle(() => BodyScrollerWrapper.Margin(top: Tabs.ActualBottom));
-
                 BodyScrollerWrapper.Y.BindTo(Tabs.Y, Tabs.Height, (y, h) => y + h);
             }
             else
             {
                 Height.BindTo(Root.Height, Tabs.Height, (x, y) => x - y);
                 Tabs.Y.BindTo(Root.Height, Tabs.Height, (x, y) => x - y);
-                BodyScrollerWrapper.Height.BindTo(Height, NavBarBackground.Height, (x, y) => x - y);
-                BodyScrollerWrapper.Margin(top: NavBarBackground.ActualBottom);
+                BodyScrollerWrapper.Y.BindTo(NavBarBackground.Height);
             }
+
+            BodyScrollerWrapper.Height.BindTo(View.Root.Height, NavBarBackground.Height, Tabs.Height, (x, y, z) => x - y - z);
 
             await Tabs.Visible().BringToFront();
         }
