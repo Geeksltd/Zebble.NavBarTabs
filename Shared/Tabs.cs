@@ -1,4 +1,4 @@
-﻿namespace Zebble
+namespace Zebble
 {
     using System;
     using System.Collections.Generic;
