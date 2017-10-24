@@ -109,6 +109,7 @@ namespace Zebble
                 await AnimateMenuIn();
                 await overlayAnimation;
             }
+
             if (!IsToggling) await Toggled.Raise();
         }
 
@@ -123,6 +124,7 @@ namespace Zebble
                 await AnimateMenuOut();
                 this.Hide();
             }
+
             if (!IsToggling) await Toggled.Raise();
         }
 

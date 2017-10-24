@@ -6,8 +6,9 @@ namespace Zebble
 
     public abstract class NavBarPage : Page
     {
+        const int TOP_ZINDEX = 100000;
         public static Canvas NavBarBackground { get; private set; }
-        protected readonly NavigationBar NavBar = new NavigationBar().Absolute();
+        protected readonly NavigationBar NavBar = new NavigationBar().Absolute().ZIndex(TOP_ZINDEX);
         public readonly Canvas BodyScrollerWrapper = new Canvas().Id("BodyScrollerWrapper");
         public readonly ScrollView BodyScroller = new ScrollView().Id("BodyScroller");
         public readonly Stack Body = new Stack { Id = "Body" };
@@ -15,15 +16,6 @@ namespace Zebble
         static NavBarPage()
         {
             Nav.NavigationAnimationStarted.Handle(OnNavigationAnimationStarted);
-
-            Nav.FullRefreshed.Handle(async () =>
-            {
-                if (NavBarBackground != null)
-                {
-                    await Root.Remove(NavBarBackground);
-                    NavBarBackground = null;
-                }
-            });
         }
 
         protected override async Task InitializeFromMarkup()
@@ -38,7 +30,7 @@ namespace Zebble
 
         public override async Task OnInitializing()
         {
-            if (NavBarBackground == null) await CreateNavBarBackground();
+            await CreateNavBarBackground();
             await base.OnInitializing();
         }
 
@@ -46,12 +38,13 @@ namespace Zebble
         {
             var result = new Canvas().Id("NavBarBackground")
                 .Absolute()
+                .ZIndex(TOP_ZINDEX - 1)
                 .CssClass("navbar-background");
 
             if (!(Nav.CurrentPage is NavBarPage))
                 result.Hide();
 
-            await Root.Add(result, awaitNative: true);
+            await Add(result, awaitNative: true);
 
             NavBarBackground = result;
         }
