@@ -41,10 +41,10 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Zebble.Android, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Zebble.4.2.373\lib\MonoAndroid10\Zebble.Android.dll</HintPath>
+      <HintPath>..\packages\Zebble.4.3.100\lib\MonoAndroid10\Zebble.Android.dll</HintPath>
     </Reference>
     <Reference Include="Zebble.IconButton.Android, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Zebble.IconButton.3.20.267\lib\MonoAndroid10\Zebble.IconButton.Android.dll</HintPath>
+      <HintPath>..\packages\Zebble.IconButton.3.20.268\lib\MonoAndroid10\Zebble.IconButton.Android.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
