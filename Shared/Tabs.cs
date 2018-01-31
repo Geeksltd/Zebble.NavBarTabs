@@ -32,11 +32,24 @@ namespace Zebble
 
         public Task HighlightSelectedTab(Page activePage)
         {
+            if (activePage is PopUp) return Task.CompletedTask;
+
             var bySetting = activePage?.Data<string>("CurrentTab");
             if (bySetting.HasValue())
             {
                 GetTabs().FirstOrDefault(x => x.Label.Text == bySetting).Perform(x => x.Selected = true);
+
+                GetTabs()
+                    .Where(x => x.Label.Text != bySetting && x.Selected)
+                    .Do(async x => await x.SetSelected(value: false, disableEvent: true));
+
                 return Task.CompletedTask;
+            }
+            else
+            {
+                GetTabs()
+                    .Where(x => x.TargetPageType != activePage?.GetType() && x.Selected)
+                    .Do(async x => await x.SetSelected(value: false, disableEvent: true));
             }
 
             var currentNavPath = Nav.Stack.Select(s => s.Page).Concat(activePage?.Page).ExceptNull()
@@ -115,7 +128,9 @@ namespace Zebble
             /// <summary>
             /// This is the same as setting the Selected property, but allows you to await it.
             /// </summary>
-            public async Task SetSelected(bool value)
+            public Task SetSelected(bool value) => SetSelected(value, disableEvent: false);
+
+            internal async Task SetSelected(bool value, bool disableEvent)
             {
                 var tasks = new List<Task>();
 
@@ -125,7 +140,8 @@ namespace Zebble
                     {
                         tab.selected = false;
                         await tab.UnsetPseudoCssState("active");
-                        tasks.Add(tab.SelectedChanged.Raise());
+                        if (!disableEvent)
+                            tasks.Add(tab.SelectedChanged.Raise());
                     }
 
                     await SetPseudoCssState("active");
@@ -133,7 +149,8 @@ namespace Zebble
                 else await UnsetPseudoCssState("active");
 
                 selected = value;
-                tasks.Add(SelectedChanged.Raise());
+                if (!disableEvent)
+                    tasks.Add(SelectedChanged.Raise());
             }
 
             public override void Dispose()
