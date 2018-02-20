@@ -12,6 +12,7 @@ namespace Zebble
         bool IsExpanded, Animating, IsToggling;
 
         public float MenuWidth = 250;
+        public float OverlayOpacity = 0.35f;
 
         static MainMenuLauncher()
         {
@@ -98,17 +99,10 @@ namespace Zebble
             if (IsExpanded) return;
             IsExpanded = true;
 
-            using (Stylesheet.Preserve(Overlay, x => x.Opacity))
-            {
-                var overlayOpacity = Overlay.Opacity;
-                Overlay.Opacity(0);
+            this.Visible();
 
-                this.Visible();
-
-                var overlayAnimation = Overlay.Animate(Animation.FadeDuration, x => x.Opacity(overlayOpacity));
-                await AnimateMenuIn();
-                await overlayAnimation;
-            }
+            AnimateOverlayIn().RunInParallel();
+            await AnimateMenuIn();
 
             if (!IsToggling) await Toggled.Raise();
         }
@@ -118,12 +112,10 @@ namespace Zebble
             if (!IsExpanded) return;
             IsExpanded = false;
 
-            using (Stylesheet.Preserve(Overlay, x => x.Opacity))
-            {
-                Overlay.Animate(Animation.FadeDuration, x => x.Opacity(0)).RunInParallel();
-                await AnimateMenuOut();
-                this.Hide();
-            }
+            AnimateOverlayOut().RunInParallel();
+            await AnimateMenuOut();
+
+            this.Hide();
 
             if (!IsToggling) await Toggled.Raise();
         }
@@ -146,6 +138,21 @@ namespace Zebble
             else if (Alignment == HorizontalAlignment.Right)
                 return Menu.Animate(m => m.X(100.Percent()));
             else throw new NotImplementedException(Alignment + " is not implemented.");
+        }
+
+        protected virtual Task AnimateOverlayIn()
+        {
+            return Overlay.Animate(
+                    Animation.FadeDuration,
+                    initialState: x => x.Opacity(0),
+                    change: x => x.Opacity(OverlayOpacity));
+        }
+
+        protected virtual Task AnimateOverlayOut()
+        {
+            return Overlay.Animate(
+                    Animation.FadeDuration,
+                    x => x.Opacity(0));
         }
 
         protected virtual Task SetInitialMenuPosition()
