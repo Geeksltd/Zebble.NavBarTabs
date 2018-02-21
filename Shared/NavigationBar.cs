@@ -3,7 +3,7 @@ namespace Zebble
     using System;
     using System.Threading.Tasks;
 
-    public class NavigationBar : Canvas
+    public partial class NavigationBar : Canvas
     {
         public readonly TextView Title = new TextView { Id = "Title" };
         public readonly Stack Left = new Stack(RepeatDirection.Horizontal).Id("Left")
@@ -17,6 +17,14 @@ namespace Zebble
             await Add(Title);
             await Add(Left);
             await Add(Right);
+        }
+
+        public override async Task OnRendered()
+        {
+            await base.OnRendered();
+#if IOS
+            FixIPhoneXLayout();
+#endif
         }
 
         public Task<TView> AddButton<TView>(ButtonLocation location, TView button) where TView : View

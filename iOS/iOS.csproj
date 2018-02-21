@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="Xamarin.iOS" />
     <Reference Include="Zebble.IconButton.iOS, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Zebble.IconButton.3.20.268\lib\Xamarin.iOS10\Zebble.IconButton.iOS.dll</HintPath>
     </Reference>
@@ -49,6 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Zebble-LicenseAgreement.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="NavigationBar.cs" />
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" Condition="Exists('..\Shared\Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
