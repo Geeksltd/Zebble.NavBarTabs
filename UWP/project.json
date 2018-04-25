@@ -1,8 +1,8 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.6",
-    "Zebble": "4.3.100",
-    "Zebble.IconButton": "3.20.268"
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.8",
+    "Zebble": "4.4.107",
+    "Zebble.IconButton": "3.20.269"
   },
   "frameworks": {
     "uap10.0.10240": {}
