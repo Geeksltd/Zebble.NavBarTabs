@@ -49,9 +49,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NavigationBar.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Zebble-LicenseAgreement.txt" />
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" Condition="Exists('..\Shared\Shared.projitems')" />

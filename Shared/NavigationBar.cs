@@ -19,14 +19,6 @@ namespace Zebble
             await Add(Right);
         }
 
-        public override async Task OnRendered()
-        {
-            await base.OnRendered();
-#if IOS
-            FixIPhoneXLayout();
-#endif
-        }
-
         public Task<TView> AddButton<TView>(ButtonLocation location, TView button) where TView : View
         {
             if (location == ButtonLocation.Left) return Left.Add(button);
