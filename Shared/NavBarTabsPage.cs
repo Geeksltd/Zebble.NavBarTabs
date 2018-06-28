@@ -78,7 +78,7 @@ namespace Zebble
 
             BodyScrollerWrapper.Height.BindTo(View.Root.Height, NavBarBackground.Height, Tabs.Height, (x, y, z) => x - y - z);
 
-            await Tabs.Visible().BringToFront();
+            await Tabs.BringToFront();
         }
     }
 }
