@@ -21,7 +21,11 @@ namespace Zebble
         protected override async Task InitializeFromMarkup()
         {
             await base.InitializeFromMarkup();
+            await AddViews();
+        }
 
+        protected virtual async Task AddViews()
+        {
             await Add(NavBar);
             await Add(BodyScrollerWrapper);
             await BodyScrollerWrapper.Add(BodyScroller);
