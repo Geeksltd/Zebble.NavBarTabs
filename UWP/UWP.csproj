@@ -117,7 +117,7 @@
       <Version>6.0.8</Version>
     </PackageReference>
     <PackageReference Include="Zebble">
-      <Version>4.4.178</Version>
+      <Version>4.4.185</Version>
     </PackageReference>
     <PackageReference Include="Zebble.IconButton">
       <Version>3.20.269</Version>
