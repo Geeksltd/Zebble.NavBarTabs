@@ -56,6 +56,8 @@ namespace Zebble
 
             await Task.Delay(Animation.OneFrame);
             await Root.Add(Current, awaitNative: true);
+
+            await Current.BringToFront();
         }
 
         public virtual async Task Show()
