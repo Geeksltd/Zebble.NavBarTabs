@@ -1,8 +1,8 @@
 ﻿<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -43,7 +43,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\lib\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
-    <NoWarn>;2008;1998</NoWarn>
+    <NoWarn>;2008;1998;1591</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
@@ -117,10 +117,10 @@
       <Version>6.0.8</Version>
     </PackageReference>
     <PackageReference Include="Zebble">
-      <Version>4.4.185</Version>
+      <Version>4.4.332</Version>
     </PackageReference>
     <PackageReference Include="Zebble.IconButton">
-      <Version>3.20.269</Version>
+      <Version>3.20.273</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" Condition="Exists('..\Shared\Shared.projitems')" />
@@ -142,12 +142,7 @@
     <Error Condition="!Exists('..\Shared\Shared.projitems')" Text="This project references Shared that are missing on this computer." />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>if $(PlatformName) == x86 (
-if not exist $(SolutionDir)lib\bin\Release mkdir $(SolutionDir)lib\bin\Release
-
-robocopy  $(SolutionDir)lib\bin\x86\Release $(SolutionDir)lib\bin\Release /COPYALL /E
-
-$(SolutionDir)Shared\NuGet\CorFlags.exe /32bitreq- $(SolutionDir)lib\bin\Release\Zebble.NavBarTabs.UWP.dll
-)</PostBuildEvent>
+    <PostBuildEvent>copy /y  $(TargetDir)Zebble.NavBarTabs.UWP.* C:\Users\Administrator\.nuget\packages\zebble.navbartabs\2.6.352\runtimes\win10-x86\lib\uap10.0
+copy /y  $(TargetDir)Zebble.NavBarTabs.UWP.* C:\Users\Administrator\.nuget\packages\zebble.navbartabs\2.6.352\lib\uap10.0</PostBuildEvent>
   </PropertyGroup>
 </Project>

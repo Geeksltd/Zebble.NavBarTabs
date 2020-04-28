@@ -23,7 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <DocumentationFile>..\lib\Zebble.NavBarTabs.iOS.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591;VSX1000;1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -39,10 +39,10 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
     <Reference Include="Zebble.IconButton.iOS, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Zebble.IconButton.3.20.269\lib\Xamarin.iOS10\Zebble.IconButton.iOS.dll</HintPath>
+      <HintPath>..\packages\Zebble.IconButton.3.20.273\lib\Xamarin.iOS10\Zebble.IconButton.iOS.dll</HintPath>
     </Reference>
     <Reference Include="Zebble.iOS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Zebble.4.4.185\lib\Xamarin.iOS10\Zebble.iOS.dll</HintPath>
+      <HintPath>..\packages\Zebble.4.4.332\lib\Xamarin.iOS10\Zebble.iOS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
