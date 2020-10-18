@@ -80,8 +80,10 @@ namespace Zebble
             await base.OnInitializing();
 
             await Add(Overlay.On(x => x.Tapped, HideMenu));
-            Nav.Navigated.Handle(HideMenu);
-            Swiped.Handle(a => a.Direction == Direction.Left ? HideMenu() : Task.CompletedTask);
+
+            Nav.Navigated.Event += () => HideMenu().RunInParallel();
+            Swiped.FullEvent += a => { if (a.Direction == Direction.Left) HideMenu().RunInParallel(); };
+
             await Add(Menu = new TMenu());
         }
 

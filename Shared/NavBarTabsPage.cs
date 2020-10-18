@@ -10,16 +10,16 @@ namespace Zebble
 
         static NavBarTabsPage()
         {
-            Nav.NavigationAnimationStarted.Handle(HandleNavigationAnimationStarted);
+            Nav.NavigationAnimationStarted.FullEvent += HandleNavigationAnimationStarted;
 
-            Nav.FullRefreshed.Handle(async () =>
+            Nav.FullRefreshed.Event += async () =>
             {
                 if (Tabs != null)
                 {
                     await Root.Remove(Tabs);
                     Tabs = null;
                 }
-            });
+            };
         }
 
         protected override async Task InitializeFromMarkup()
@@ -33,26 +33,20 @@ namespace Zebble
             }
         }
 
-        static Task HandleNavigationAnimationStarted(NavigationEventArgs args)
+        static void HandleNavigationAnimationStarted(NavigationEventArgs args)
         {
-            if (Tabs == null) return Task.CompletedTask;
+            if (Tabs == null) return;
 
-            if (args.From is PopUp || args.To is PopUp) return Task.CompletedTask;
+            if (args.From is PopUp || args.To is PopUp) return;
 
             var shouldFadeIn = args.To is NavBarTabsPage<TTabs> && !(args.From is NavBarTabsPage<TTabs>);
             var shouldFadeOut = args.From is NavBarTabsPage<TTabs> && !(args.To is NavBarTabsPage<TTabs>);
 
             if (shouldFadeIn)
-                Tabs?.Animate(Animation.DefaultDuration,
-                      x => { x.Opacity(0); x.Visible(); },
-                      x => x.Opacity(1)).RunInParallel();
+                Tabs?.Animate(Animation.DefaultDuration, x => x.Opacity(0).Visible(), x => x.Opacity(1)).RunInParallel();
             else if (shouldFadeOut)
-                Tabs?.Animate(Animation.DefaultDuration,
-                    x => { x.Opacity(1); x.Visible(); },
-                    x => x.Opacity(0)).RunInParallel();
+                Tabs?.Animate(Animation.DefaultDuration, x => x.Opacity(1).Visible(), x => x.Opacity(0)).RunInParallel();
             else Tabs?.Visible(args.To is NavBarTabsPage<TTabs>);
-
-            return Task.CompletedTask;
         }
 
         protected virtual bool ShowTabsAtTheTop() => CssEngine.Platform == DevicePlatform.Android;
@@ -65,8 +59,8 @@ namespace Zebble
             {
                 Height.BindTo(Root.Height);
                 Tabs.Y.BindTo(NavBarBackground.Height);
-                Tabs.Height.Changed.Handle(() => BodyScrollerWrapper.Margin(top: Tabs.ActualBottom));
-                Tabs.Y.Changed.Handle(() => BodyScrollerWrapper.Margin(top: Tabs.ActualBottom));
+                Tabs.Height.Changed.Event += () => BodyScrollerWrapper.Margin(top: Tabs.ActualBottom);
+                Tabs.Y.Changed.Event += () => BodyScrollerWrapper.Margin(top: Tabs.ActualBottom);
                 BodyScrollerWrapper.Y.BindTo(Tabs.Y, Tabs.Height, (y, h) => y + h);
             }
             else

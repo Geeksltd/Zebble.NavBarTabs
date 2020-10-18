@@ -22,17 +22,15 @@ namespace Zebble
         public override async Task OnPreRender()
         {
             await base.OnPreRender();
-
-            await HighlightSelectedTab();
-
-            Nav.Navigated.Handle(HighlightSelectedTab);
+            HighlightSelectedTab();
+            Nav.Navigated.FullEvent += x => HighlightSelectedTab(x.To);
         }
 
-        Task HighlightSelectedTab() => HighlightSelectedTab(Nav.CurrentPage);
+        void HighlightSelectedTab() => HighlightSelectedTab(Nav.CurrentPage);
 
-        public Task HighlightSelectedTab(Page activePage)
+        public void HighlightSelectedTab(Page activePage)
         {
-            if (activePage is PopUp) return Task.CompletedTask;
+            if (activePage is PopUp) return;
 
             var bySetting = activePage?.Data<string>("CurrentTab");
             if (bySetting.HasValue())
@@ -43,7 +41,7 @@ namespace Zebble
                     .Where(x => x.Label.Text != bySetting && x.Selected)
                     .Do(async x => await x.SetSelected(value: false, disableEvent: true));
 
-                return Task.CompletedTask;
+                return;
             }
             else
             {
@@ -66,8 +64,6 @@ namespace Zebble
                 var selected = tabsInNavHistory.WithMin(x => x.Distance)?.Tab;
                 selected.Perform(t => t.Selected = true);
             }
-
-            return Task.CompletedTask;
         }
 
         public class Tab<TPage> : Tab where TPage : Page, new()

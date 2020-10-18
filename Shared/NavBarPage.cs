@@ -15,7 +15,7 @@ namespace Zebble
 
         static NavBarPage()
         {
-            Nav.NavigationAnimationStarted.Handle(OnNavigationAnimationStarted);
+            Nav.NavigationAnimationStarted.FullEvent += OnNavigationAnimationStarted;
         }
 
         protected override async Task InitializeFromMarkup()
@@ -53,9 +53,9 @@ namespace Zebble
             NavBarBackground = result;
         }
 
-        static Task OnNavigationAnimationStarted(NavigationEventArgs args)
+        static void OnNavigationAnimationStarted(NavigationEventArgs args)
         {
-            if (args.From is PopUp || args.To is PopUp) return Task.CompletedTask;
+            if (args.From is PopUp || args.To is PopUp) return;
 
             NavBarBackground?.Visible(args.To is NavBarPage);
 
@@ -72,10 +72,8 @@ namespace Zebble
             }
             else
             {
-                (args.To as NavBarPage)?.NavBar.Perform(b => b.Opacity(1));
+                (args.To as NavBarPage)?.NavBar?.Opacity(1);
             }
-
-            return Task.CompletedTask;
         }
 
         public override async Task OnPreRender()
@@ -90,7 +88,7 @@ namespace Zebble
             BodyScrollerWrapper.Height.BindTo(Root.Height, NavBar.Height, (x, y) => x - y);
             BodyScrollerWrapper.Margin(top: NavBarBackground.ActualBottom);
 
-            NavBar.Height.Changed.Handle(() => BodyScrollerWrapper.Margin(top: NavBar.ActualHeight));
+            NavBar.Height.Changed.Event += () => BodyScrollerWrapper.Margin(top: NavBar.ActualHeight);
         }
 
         protected virtual View CreateBackButton() => new IconButton { CssClass = "navbar-button back", Text = "Back" };
