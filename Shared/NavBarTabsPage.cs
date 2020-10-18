@@ -39,14 +39,29 @@ namespace Zebble
 
             if (args.From is PopUp || args.To is PopUp) return;
 
-            var shouldFadeIn = args.To is NavBarTabsPage<TTabs> && !(args.From is NavBarTabsPage<TTabs>);
-            var shouldFadeOut = args.From is NavBarTabsPage<TTabs> && !(args.To is NavBarTabsPage<TTabs>);
+            var showTabs = args.To is NavBarTabsPage<TTabs>;
+            var shouldFadeIn = showTabs && !(args.From is NavBarTabsPage<TTabs>);
+            var shouldFadeOut = args.From is NavBarTabsPage<TTabs> && !showTabs;
 
-            if (shouldFadeIn)
-                Tabs?.Animate(Animation.DefaultDuration, x => x.Opacity(0).Visible(), x => x.Opacity(1)).RunInParallel();
-            else if (shouldFadeOut)
-                Tabs?.Animate(Animation.DefaultDuration, x => x.Opacity(1).Visible(), x => x.Opacity(0)).RunInParallel();
-            else Tabs?.Visible(args.To is NavBarTabsPage<TTabs>);
+            if (shouldFadeIn) AnimateTabsIn();
+            else if (shouldFadeOut) AnimateTabsOut();
+            else UIWorkBatch.RunSync(() => Tabs?.Visible(showTabs).Opacity(showTabs ? 1 : 0));
+        }
+
+        static void AnimateTabsIn()
+        {
+            Tabs?.Animate(Animation.DefaultDuration, AnimationEasing.Linear,
+                       x => { x.Opacity(0).Visible(); },
+                       x => x.Opacity(1)).RunInParallel();
+        }
+
+        static void AnimateTabsOut()
+        {
+            if (Tabs == null) return;
+            var ani = Animation.Create(Tabs, Animation.DefaultDuration, AnimationEasing.Linear, change: x => x.Opacity(0))
+                .OnCompleted(() => Tabs?.Hide());
+
+            Tabs?.Animate(ani).RunInParallel();
         }
 
         protected virtual bool ShowTabsAtTheTop() => CssEngine.Platform == DevicePlatform.Android;
@@ -70,9 +85,9 @@ namespace Zebble
                 BodyScrollerWrapper.Y.BindTo(NavBarBackground.Height);
             }
 
-            BodyScrollerWrapper.Height.BindTo(View.Root.Height, NavBarBackground.Height, Tabs.Height, (x, y, z) => x - y - z);
+            BodyScrollerWrapper.Height.BindTo(Root.Height, NavBarBackground.Height, Tabs.Height, (x, y, z) => x - y - z);
 
-            await Tabs.BringToFront();
+            await Tabs.Visible().BringToFront();
         }
     }
 }

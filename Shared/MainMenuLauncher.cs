@@ -11,8 +11,7 @@ namespace Zebble
         public static TMenu Menu;
         bool IsExpanded, Animating, IsToggling;
 
-        public float MenuWidth = 250;
-        public float OverlayOpacity = 0.35f;
+        public float MenuWidth = 250, OverlayOpacity = 0.35f;
 
         static MainMenuLauncher()
         {
@@ -92,7 +91,8 @@ namespace Zebble
             if (Animating) return;
             Animating = true;
             IsToggling = true;
-            if (IsExpanded) await HideMenu(); else await ShowMenu();
+            if (IsExpanded) await HideMenu();
+            else await ShowMenu();
             IsToggling = false;
             Animating = false;
             await Toggled.Raise();

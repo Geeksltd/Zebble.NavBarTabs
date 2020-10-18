@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Zebble.NavBarTabs</id>
-    <version>2.6.351</version>
+    <version>2.6.354</version>
     <title>Tabs/NavBar for Zebble (Xamarin)</title>
     <description>A set of components for tabs navigation layout, nav bar and main menu.</description>
     <iconUrl>https://raw.githubusercontent.com/Geeksltd/Zebble.NavBarTabs/master/Shared/NuGet/Icon.png</iconUrl>
