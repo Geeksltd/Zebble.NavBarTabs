@@ -32,12 +32,14 @@ namespace Zebble
         {
             if (activePage is PopUp) return;
 
+            var tabs = GetTabs();
+
             var bySetting = activePage?.Data<string>("CurrentTab");
             if (bySetting.HasValue())
             {
-                GetTabs().FirstOrDefault(x => x.Label.Text == bySetting).Perform(x => x.Selected = true);
+                tabs.FirstOrDefault(x => x.Label.Text == bySetting).Perform(x => x.Selected = true);
 
-                GetTabs()
+                tabs
                     .Where(x => x.Label.Text != bySetting && x.Selected)
                     .Do(async x => await x.SetSelected(value: false, disableEvent: true));
 
@@ -45,25 +47,21 @@ namespace Zebble
             }
             else
             {
-                GetTabs()
+                tabs
                     .Where(x => x.TargetPageType != activePage?.GetType() && x.Selected)
                     .Do(async x => await x.SetSelected(value: false, disableEvent: true));
             }
 
-            var currentNavPath = Nav.Stack.Select(s => s.Page).Concat(activePage?.Page).ExceptNull()
-                           .Select(c => c.GetType()).Reverse().ToArray();
+            var currentNavPath = Nav.Stack.ToArray().Select(s => s.Page).Concat(activePage?.Page).ExceptNull()
+                .Select(c => c.GetType()).Reverse().ToArray();
 
-            var tabsInNavHistory = GetTabs()
+            var selected = tabs
                 .Where(tab => tab.TargetPageType != null)
                 .Where(tab => currentNavPath.Contains(tab.TargetPageType))
                 .Select(x => new { Tab = x, Distance = currentNavPath.IndexOf(p => p == x.TargetPageType) })
-                .ToArray();
+                .WithMin(x => x.Distance)?.Tab;
 
-            if (tabsInNavHistory.Any())
-            {
-                var selected = tabsInNavHistory.WithMin(x => x.Distance)?.Tab;
-                selected.Perform(t => t.Selected = true);
-            }
+            selected?.Set(t => t.Selected = true);
         }
 
         public class Tab<TPage> : Tab where TPage : Page, new()
@@ -84,7 +82,7 @@ namespace Zebble
             }
         }
 
-        public IEnumerable<Tab> GetTabs() => AllDescendents().OfType<Tab>();
+        public Tab[] GetTabs() => AllDescendents().OfType<Tab>().ToArray();
 
         public class Tab : Canvas
         {
