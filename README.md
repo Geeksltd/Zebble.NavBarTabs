@@ -1,4 +1,4 @@
-[logo]: https://raw.githubusercontent.com/Geeksltd/Zebble.NavBarTabs/master/Shared/NuGet/Icon.png "Zebble.NavBarTabs"
+﻿[logo]: https://raw.githubusercontent.com/Geeksltd/Zebble.NavBarTabs/master/icon.png "Zebble.NavBarTabs"
 
 
 ## Zebble.NavBarTabs

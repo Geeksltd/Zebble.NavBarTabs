@@ -2,6 +2,7 @@ namespace Zebble
 {
     using System;
     using System.Threading.Tasks;
+    using Olive;
 
     public class MainMenuLauncher<TMenu> : Canvas where TMenu : View, new()
     {
