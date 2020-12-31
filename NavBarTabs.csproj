@@ -7,7 +7,7 @@
     <RootNamespace>Zebble</RootNamespace>
     <PackageId>Zebble.NavBarTabs</PackageId>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <Version>2.6.355</Version>
+    <Version>2.6.356.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <LangVersion>default</LangVersion>
@@ -69,8 +69,8 @@
     <PackageReference Include="Zebble.IconButton" Version="3.20.277" />
   </ItemGroup>
   <ItemGroup>
-	<Folder Include="Android\" />
-	<Folder Include="iOS\" />
-	<Folder Include="UWP\" />
+    <Folder Include="Android\" />
+    <Folder Include="iOS\" />
+    <Folder Include="UWP\" />
   </ItemGroup>
 </Project>
