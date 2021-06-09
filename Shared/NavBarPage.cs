@@ -9,7 +9,6 @@ namespace Zebble
         const int TOP_ZINDEX = 100000;
         public static Canvas NavBarBackground { get; private set; }
         protected readonly NavigationBar NavBar = new NavigationBar().Absolute().ZIndex(TOP_ZINDEX);
-        public readonly Canvas BodyScrollerWrapper = new Canvas().Id("BodyScrollerWrapper");
         public readonly ScrollView BodyScroller = new ScrollView().Id("BodyScroller");
         public readonly Stack Body = new Stack { Id = "Body" };
 
@@ -27,8 +26,7 @@ namespace Zebble
         protected virtual async Task AddViews()
         {
             await Add(NavBar);
-            await Add(BodyScrollerWrapper);
-            await BodyScrollerWrapper.Add(BodyScroller);
+            await Add(BodyScroller);
             await BodyScroller.Add(Body);
         }
 
@@ -85,10 +83,10 @@ namespace Zebble
             NavBarBackground.Height.BindTo(NavBar.Height);
             NavBarBackground.Visible();
 
-            BodyScrollerWrapper.Height.BindTo(Root.Height, NavBar.Height, (x, y) => x - y);
-            BodyScrollerWrapper.Margin(top: NavBarBackground.ActualBottom);
+            BodyScroller.Height.BindTo(Root.Height, NavBar.Height, (x, y) => x - y);
+            BodyScroller.Margin(top: NavBarBackground.ActualBottom);
 
-            NavBar.Height.Changed.Event += () => BodyScrollerWrapper.Margin(top: NavBar.ActualHeight);
+            NavBar.Height.Changed.Event += () => BodyScroller.Margin(top: NavBar.ActualHeight);
         }
 
         protected virtual View CreateBackButton() => new IconButton { CssClass = "navbar-button back", Text = "Back" };

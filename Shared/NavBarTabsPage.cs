@@ -3,6 +3,7 @@ namespace Zebble
     using System;
     using System.Threading.Tasks;
     using Services;
+    using System.Linq;
 
     public abstract class NavBarTabsPage<TTabs> : NavBarPage where TTabs : Tabs, new()
     {
@@ -66,6 +67,8 @@ namespace Zebble
 
         protected virtual bool ShowTabsAtTheTop() => CssEngine.Platform == DevicePlatform.Android;
 
+        protected virtual bool HasKeyboardLayout() => CssEngine.Platform == DevicePlatform.Android && AllDescendents().OfType<TextInput>().Any();
+
         public override async Task OnPreRender()
         {
             await base.OnPreRender();
@@ -74,18 +77,20 @@ namespace Zebble
             {
                 Height.BindTo(Root.Height);
                 Tabs.Y.BindTo(NavBarBackground.Height);
-                Tabs.Height.Changed.Event += () => BodyScrollerWrapper.Margin(top: Tabs.ActualBottom);
-                Tabs.Y.Changed.Event += () => BodyScrollerWrapper.Margin(top: Tabs.ActualBottom);
-                BodyScrollerWrapper.Y.BindTo(Tabs.Y, Tabs.Height, (y, h) => y + h);
+                Tabs.Height.Changed.Event += () => BodyScroller.Margin(top: Tabs.ActualBottom);
+                Tabs.Y.Changed.Event += () => BodyScroller.Margin(top: Tabs.ActualBottom);
+                BodyScroller.Y.BindTo(Tabs.Y, Tabs.Height, (y, h) => y + h);
             }
             else
             {
-                Height.BindTo(Root.Height, Tabs.Height, (x, y) => x - y);
+                if (HasKeyboardLayout()) Height.BindTo(Root.Height);
+                else Height.BindTo(Root.Height, Tabs.Height, (x, y) => x - y);
+
                 Tabs.Y.BindTo(Root.Height, Tabs.Height, (x, y) => x - y);
-                BodyScrollerWrapper.Y.BindTo(NavBarBackground.Height);
+                BodyScroller.Y.BindTo(NavBarBackground.Height);
             }
 
-            BodyScrollerWrapper.Height.BindTo(Root.Height, NavBarBackground.Height, Tabs.Height, (x, y, z) => x - y - z);
+            BodyScroller.Height.BindTo(Root.Height, NavBarBackground.Height, Tabs.Height, (x, y, z) => x - y - z);
 
             await Tabs.Visible().BringToFront();
         }
