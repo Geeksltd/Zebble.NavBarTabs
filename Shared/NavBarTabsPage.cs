@@ -40,6 +40,10 @@ namespace Zebble
 
             if (args.From is PopUp || args.To is PopUp) return;
 
+            // This seems to be a timing issue?
+            // We're navigating between two pages and CurrentPage is none of them?
+            if (!Nav.CurrentPage.IsAnyOf(args.From, args.To)) return;
+
             var showTabs = args.To is NavBarTabsPage<TTabs>;
             var shouldFadeIn = showTabs && !(args.From is NavBarTabsPage<TTabs>);
             var shouldFadeOut = args.From is NavBarTabsPage<TTabs> && !showTabs;
