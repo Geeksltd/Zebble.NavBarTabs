@@ -131,7 +131,7 @@ namespace Zebble
 
                 if (value)
                 {
-                    foreach (var tab in FindParent<Tabs>().GetTabs().Except(this))
+                    foreach (var tab in (FindParent<Tabs>()?.GetTabs()).OrEmpty().Except(this))
                     {
                         tab.selected = false;
                         await tab.UnsetPseudoCssState("active");

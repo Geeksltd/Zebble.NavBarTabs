@@ -6,7 +6,7 @@
     <RootNamespace>Zebble</RootNamespace>
     <PackageId>Zebble.NavBarTabs</PackageId>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <Version>2.6.361.0</Version>
+    <Version>2.6.362.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <DefineConstants>$(DefineConstants)</DefineConstants>
