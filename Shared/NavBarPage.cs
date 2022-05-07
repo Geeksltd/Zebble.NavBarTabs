@@ -7,14 +7,17 @@ namespace Zebble
     public abstract class NavBarPage : Page
     {
         const int TOP_ZINDEX = 100000;
-        public static Canvas NavBarBackground { get; private set; }
+        public Canvas NavBarBackground { get; private set; }
         protected readonly NavigationBar NavBar = new NavigationBar().Absolute().ZIndex(TOP_ZINDEX);
         public readonly ScrollView BodyScroller = new ScrollView().Id("BodyScroller");
-        public readonly Stack Body = new Stack { Id = "Body" };
+        public readonly Stack Body = new Stack().Id("Body");
 
-        static NavBarPage()
+        protected NavBarPage() => Nav.NavigationAnimationStarted.FullEvent += OnNavigationAnimationStarted;
+
+        public override void Dispose()
         {
-            Nav.NavigationAnimationStarted.FullEvent += OnNavigationAnimationStarted;
+            Nav.NavigationAnimationStarted.FullEvent -= OnNavigationAnimationStarted;
+            base.Dispose();
         }
 
         protected override async Task InitializeFromMarkup()
@@ -25,8 +28,8 @@ namespace Zebble
 
         protected virtual async Task AddViews()
         {
-            await Add(NavBar);
-            await Add(BodyScroller);
+            await Wrapper.Add(NavBar);
+            await Wrapper.Add(BodyScroller);
             await BodyScroller.Add(Body);
         }
 
@@ -43,15 +46,15 @@ namespace Zebble
                 .ZIndex(TOP_ZINDEX - 1)
                 .CssClass("navbar-background");
 
-            if (!(Nav.CurrentPage is NavBarPage))
+            if (Nav.CurrentPage is not NavBarPage)
                 result.Hide();
 
-            await Add(result, awaitNative: true);
+            await Wrapper.Add(result, awaitNative: true);
 
             NavBarBackground = result;
         }
 
-        static void OnNavigationAnimationStarted(NavigationEventArgs args)
+        void OnNavigationAnimationStarted(NavigationEventArgs args)
         {
             if (args.From is PopUp || args.To is PopUp) return;
 
@@ -137,5 +140,7 @@ namespace Zebble
         {
             throw new NotImplementedException("NavBarPage.OnMenuTapped() should be overriden.");
         }
+
+        protected virtual View Wrapper => this;
     }
 }

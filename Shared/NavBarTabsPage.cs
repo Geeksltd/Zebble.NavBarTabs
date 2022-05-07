@@ -7,20 +7,19 @@ namespace Zebble
 
     public abstract class NavBarTabsPage<TTabs> : NavBarPage where TTabs : Tabs, new()
     {
-        public static TTabs Tabs { get; private set; }
+        public TTabs Tabs { get; private set; }
 
-        static NavBarTabsPage()
+        protected NavBarTabsPage()
         {
             Nav.NavigationAnimationStarted.FullEvent += HandleNavigationAnimationStarted;
+            Nav.FullRefreshed.Event += HandleFullRefreshed;
+        }
 
-            Nav.FullRefreshed.Event += async () =>
-            {
-                if (Tabs != null)
-                {
-                    await Root.Remove(Tabs);
-                    Tabs = null;
-                }
-            };
+        public override void Dispose()
+        {
+            Nav.NavigationAnimationStarted.FullEvent -= HandleNavigationAnimationStarted;
+            Nav.FullRefreshed.Event -= HandleFullRefreshed;
+            base.Dispose();
         }
 
         protected override async Task InitializeFromMarkup()
@@ -30,11 +29,11 @@ namespace Zebble
             if (Tabs == null)
             {
                 Tabs = new TTabs().Absolute().Hide();
-                await Root.Add(Tabs);
+                await Wrapper.Add(Tabs);
             }
         }
 
-        static void HandleNavigationAnimationStarted(NavigationEventArgs args)
+        void HandleNavigationAnimationStarted(NavigationEventArgs args)
         {
             if (Tabs == null) return;
 
@@ -53,14 +52,22 @@ namespace Zebble
             else UIWorkBatch.RunSync(() => Tabs?.Visible(showTabs).Opacity(showTabs ? 1 : 0));
         }
 
-        static void AnimateTabsIn()
+        async void HandleFullRefreshed()
+        {
+            if (Tabs is null) return;
+
+            await Wrapper.Remove(Tabs);
+            Tabs = null;
+        }
+
+        void AnimateTabsIn()
         {
             Tabs?.Animate(Animation.DefaultDuration, AnimationEasing.Linear,
                        x => { x.Opacity(0).Visible(); },
                        x => x.Opacity(1)).RunInParallel();
         }
 
-        static void AnimateTabsOut()
+        void AnimateTabsOut()
         {
             if (Tabs == null) return;
             var ani = Animation.Create(Tabs, Animation.DefaultDuration, AnimationEasing.Linear, change: x => x.Opacity(0))
