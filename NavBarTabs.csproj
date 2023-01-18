@@ -6,7 +6,7 @@
     <RootNamespace>Zebble</RootNamespace>
     <PackageId>Zebble.NavBarTabs</PackageId>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <Version>2.6.363.0</Version>
+    <Version>2.6.364.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <DefineConstants>$(DefineConstants)</DefineConstants>
@@ -64,7 +64,7 @@
     <None Remove="Zebble-LicenseAgreement.txt" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Zebble" Version="4.5.625" />
+    <PackageReference Include="Zebble" Version="4.5.667" />
     <PackageReference Include="Zebble.IconButton" Version="3.20.283" />
   </ItemGroup>
   <ItemGroup>

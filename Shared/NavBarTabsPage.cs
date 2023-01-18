@@ -4,6 +4,7 @@ namespace Zebble
     using System.Threading.Tasks;
     using Services;
     using System.Linq;
+    using Olive;
 
     public abstract class NavBarTabsPage<TTabs> : NavBarPage where TTabs : Tabs, new()
     {
@@ -41,10 +42,10 @@ namespace Zebble
 
             // This seems to be a timing issue?
             // We're navigating between two pages and CurrentPage is none of them?
-            if (!Nav.CurrentPage.IsAnyOf(args.From, args.To)) return;
+            if (Nav.ActivePages.LacksAll(new[] { args.From, args.To })) return;
 
             var showTabs = args.To is NavBarTabsPage<TTabs>;
-            var shouldFadeIn = showTabs && !(args.From is NavBarTabsPage<TTabs>);
+            var shouldFadeIn = showTabs && args.From is not NavBarTabsPage<TTabs>;
             var shouldFadeOut = args.From is NavBarTabsPage<TTabs> && !showTabs;
 
             if (shouldFadeIn) AnimateTabsIn();
@@ -83,6 +84,8 @@ namespace Zebble
         public override async Task OnPreRender()
         {
             await base.OnPreRender();
+
+            if (Tabs is null) return;
 
             if (ShowTabsAtTheTop())
             {
