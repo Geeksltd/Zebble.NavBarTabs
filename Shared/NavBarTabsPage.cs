@@ -50,7 +50,14 @@ namespace Zebble
 
             if (shouldFadeIn) AnimateTabsIn();
             else if (shouldFadeOut) AnimateTabsOut();
-            else UIWorkBatch.RunSync(() => Tabs?.Visible(showTabs).Opacity(showTabs ? 1 : 0));
+            else UIWorkBatch.RunSync(() =>
+            {
+                if (Tabs is null) return;
+                if (showTabs && Tabs.Visible) return;
+                if (showTabs == false && Tabs.Visible == false) return;
+
+                Tabs?.Visible(showTabs).Opacity(showTabs ? 1 : 0);
+            });
         }
 
         async void HandleFullRefreshed()
@@ -63,6 +70,8 @@ namespace Zebble
 
         void AnimateTabsIn()
         {
+            if (Tabs?.Visible != false) return;
+
             Tabs?.Animate(Animation.DefaultDuration, AnimationEasing.Linear,
                        x => { x.Opacity(0).Visible(); },
                        x => x.Opacity(1)).RunInParallel();
@@ -70,16 +79,17 @@ namespace Zebble
 
         void AnimateTabsOut()
         {
-            if (Tabs == null) return;
-            var ani = Animation.Create(Tabs, Animation.DefaultDuration, AnimationEasing.Linear, change: x => x.Opacity(0))
-                .OnCompleted(() => Tabs?.Hide());
+            if (Tabs?.Visible == false) return;
+
+            var ani = Animation.Create(Tabs, Animation.DefaultDuration, AnimationEasing.Linear,
+                change: x => x?.Opacity(0)).OnCompleted(() => Tabs?.Hide());
 
             Tabs?.Animate(ani).RunInParallel();
         }
 
-        protected virtual bool ShowTabsAtTheTop() => CssEngine.Platform == DevicePlatform.Android;
+        protected virtual bool ShowTabsAtTheTop() => CssEngine.Platform.IsAndroid();
 
-        protected virtual bool HasKeyboardLayout() => CssEngine.Platform == DevicePlatform.Android && AllDescendents().OfType<TextInput>().Any();
+        protected virtual bool HasKeyboardLayout() => CssEngine.Platform.IsAndroid() && AllDescendents().OfType<TextInput>().Any();
 
         public override async Task OnPreRender()
         {
