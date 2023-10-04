@@ -105,13 +105,15 @@ namespace Zebble
         /// </summary>
         protected virtual bool ShowMenuDespiteBackButton() => false;
 
+        protected virtual Task OnBackTapped() => Nav.Back();
+
         protected virtual async Task AddBackOrMenu()
         {
             if (Nav.Stack.Any())
             {
                 var back = CreateBackButton();
                 back.AutoFlash = true;
-                back.On(x => x.Tapped, Nav.Back);
+                back.On(x => x.Tapped, OnBackTapped);
                 await NavBar.AddButton(GetBackButtonLocation(), back);
 
                 if (!ShowMenuDespiteBackButton()) return;
