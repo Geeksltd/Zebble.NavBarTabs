@@ -35,20 +35,22 @@ namespace Zebble
             {
                 this.Hide();
                 Current = this;
+#if ANDROID
                 Nav.HardwareBack.InsertHandler(HardwareBackHandler, 0);
+#endif
             }
         }
 
+#if ANDROID
         async Task HardwareBackHandler(HardwareBackEventArgs args)
         {
-#if ANDROID
             if (IsExpanded)
             {
                 await HideMenu();
                 args.Cancel = true;
             }
-#endif
         }
+#endif
 
         public virtual async Task Setup()
         {
@@ -173,10 +175,12 @@ namespace Zebble
             return Task.CompletedTask;
         }
 
+#if ANDROID
         public override void Dispose()
         {
             Nav.HardwareBack.RemoveHandler(HardwareBackHandler);
             base.Dispose();
         }
+#endif
     }
 }
